@@ -1,0 +1,240 @@
+{
+  "itinerario": {
+    "id": "gregorovius_roma_tramonto_anima",
+    "nome": "Roma al Tramonto dell'Anima",
+    "sottotitolo": "Una giornata sulle orme di Ferdinand Gregorovius",
+    "personaggio": {
+      "nome": "Ferdinand Gregorovius",
+      "biografia_breve": "Ferdinand Gregorovius nacque in Prussia nel 1821. Arrivò a Roma nel 1852 e vi rimase per oltre vent'anni, dedicando la sua vita alla monumentale Storia della città di Roma nel Medioevo. Nel 1876 Roma lo nominò Cittadino Onorario, un onore rarissimo per uno straniero."
+    },
+    "categoria": "storico",
+    "tema": "Roma medievale e ottocentesca",
+    "durata_totale_ore": 10.5,
+    "distanza_totale_km": 5.2,
+    "ai_layer": {
+      "toni_disponibili": ["poetico", "storico", "nostalgico", "avventuroso"]
+    }
+  },
+  "tappe": [
+    {
+      "numero": 1,
+      "id": "tappa_01_pincio",
+      "poi_id": "poi_pincio",
+      "nome": "Terrazza del Pincio",
+      "coordinate": [41.9135, 12.4826],
+      "orario_consigliato": "07:00",
+      "momento_giornata": "alba",
+      "durata_visita_min": 90,
+      "descrizione_breve": " Il Pincio è una terrazza panoramica sul colle Mons Pincius. Gregorovius iniziava qui ogni sua giornata romana.",
+      "descrizione_storica": "Il Pincio fu trasformato in giardino pubblico da Giuseppe Valadier in epoca napoleonica (1809-1814). In precedenza, era proprietà delle grandi famiglie patrizie romane. Gregorovius abitava in Via Gregoriana, a cinque minuti a piedi dalla terrazza, e nei suoi Diari romani descrive queste ore mattutine come il momento in cui Roma smetteva di essere un oggetto di studio e diventava una presenza viva.",
+      "esperienza": {
+        "musica": {
+          "brano": "Sinfonia n. 4 in La minore 'Italiana'",
+          "compositore": "Felix Mendelssohn",
+          "spotify_url": "https://open.spotify.com/intl-it/track/5f6KBZj1qc5156khDbgMES"
+        },
+        "letteratura": {
+          "citazione":"Roma, qualche volta non si lascia vedere, si racchiude in sé stessa, nella sua antichità.",
+          "autore": "Ferdinand Gregorovius"
+        },
+        "atmosfera": {
+          "luce": "alba dorata",
+          "temperatura": "fresca, aria di primavera",
+          "affollamento": "basso",
+          "emozione_target": "contemplazione"
+        }
+      }
+    },
+    {
+      "numero": 2,
+      "id": "tappa_02_foro_romano",
+      "poi_id": "poi_foro_romano",
+      "nome": "Foro Romano",
+      "coordinate": [41.8925, 12.4853],
+      "orario_consigliato": "10:00",
+      "momento_giornata": "mattina",
+      "durata_visita_min": 150,
+      "descrizione_breve": "Cuore della ricerca storica di Gregorovius sugli strati medievali nascosti sotto l'antichità.",
+      "descrizione_storica": "Il Foro Romano fu il centro politico, religioso e commerciale di Roma per oltre mille anni. Gregorovius vi trascorse decenni di ricerca, affascinato non dalla Roma imperiale ma dagli strati medievali nascosti sotto di essa. Nella sua Storia della città di Roma nel Medioevo scrisse: 'I fori pomposi dei Cesari e del popolo romano sono cadenti di vecchiezza e diventano argomento di leggenda.",
+      "esperienza": {
+        "musica": {
+          "brano": "Sonata per pianoforte n. 2 - Marcia funebre",
+          "compositore": "Frédéric Chopin",
+          "spotify_url": "https://open.spotify.com/intl-it/track/52tEhXQC5u5BaVYviadSCR"
+        },
+        "letteratura": {
+          "citazione": "Roma è silenziosa e pesante, come fuori dal mondo, come intrecciata a sé stessa.",
+          "autore" :"Ferdinand Gregorovius"
+        },
+        "atmosfera": {
+          "luce": "luce mattutina limpida",
+          "temperatura": "mite, soleggiata",
+          "affollamento": "medio",
+          "emozione_target": "rigore intellettuale"
+        }
+      }
+    },
+    {
+      "numero": 3,
+      "id": "tappa_03_campidoglio",
+      "poi_id": "poi_campidoglio",
+      "nome": "Piazza del Campidoglio",
+      "coordinate": [41.8933, 12.4828],
+      "orario_consigliato": "13:00",
+      "momento_giornata": "pomeriggio",
+      "durata_visita_min": 90,
+      "descrizione_breve": "Luogo dell'ispirazione fondamentale per l'opera monumentale dello storico. ",
+      "descrizione_storica": "Il Campidoglio è il più celebre dei sette colli di Roma, sede del potere civico fin dall'antichità. La piazza fu progettata da Michelangelo nel XVI secolo per papa Paolo III. Come Edward Gibbon prima di lui — che sul Campidoglio aveva concepito la sua Decline and Fall of the Roman Empire — anche Gregorovius trovò qui l'ispirazione per la sua opera monumentale.",
+      "esperienza": {
+        "musica": {
+          "brano": "Les Préludes - Poema sinfonico n. 3",
+          "compositore": "Franz Liszt",
+          "spotify_url": "https://open.spotify.com/intl-it/track/1AkFDSaOIJ4lxfpytKXxkc"
+        },
+        "letteratura": {
+          "citazione": " Entrai in Roma per Porta del Popolo il 2 ottobre 1852 alle 4. La mia prima uscita fu pel Campidoglio e pel Foro; sul tardi al Colosseo su cui splendeva la luna. Non ho parole per esprimere la tempesta delle emozioni che provai allora.",
+          "autore": "Ferdinand Gregorovius"
+        },
+        "atmosfera": {
+          "luce": "luce zenitale abbagliante",
+          "temperatura": "calda, mezzogiorno romano",
+          "affollamento": "medio",
+          "emozione_target": "ispirazione"
+        }
+      }
+    },
+    {
+      "numero": 4,
+      "id": "tappa_04_ghetto_ebraico",
+      "poi_id": "poi_ghetto_ebraico",
+      "nome": "Ghetto Ebraico",
+      "coordinate": [41.8956, 12.4769],
+      "orario_consigliato": "15:30",
+      "momento_giornata": "pomeriggio tardi",
+      "durata_visita_min": 120,
+      "descrizione_breve": "Gregorovius studiò la comunità ebraica come prova vivente dell'eternità di Roma.",
+      "descrizione_storica": "Il Ghetto ebraico di Roma è uno dei quartieri storici più antichi della città, abitato dalla comunità ebraica in modo ininterrotto da oltre duemila anni. Il suo cuore è il Portico d'Ottavia, struttura romana del I secolo a.C. Gregorovius gli dedicò uno dei suoi primi saggi romani: Il Ghetto e gli Ebrei di Roma (1853), affascinato da una comunità sopravvissuta a imperatori, papi e invasioni. ",
+      "esperienza": {
+        "musica": {
+          "brano": "Kol Nidrei per violoncello e orchestra",
+          "compositore": "Max Bruch",
+          "spotify_url": "https://open.spotify.com/intl-it/track/0PN9SnirhpwqgRxoYI0m5k"
+        },
+        "letteratura": {
+          "citazione": "Ammassato in un cupo e triste angolo dell'Urbe, rimpetto al Trastevere, abita qui da più secoli, quasi reietto dal resto del genere umano, il popolo degli ebrei di Roma.",
+          "autore": "Ferdinand Gregorovius"
+        },
+        "atmosfera": {
+          "luce": "luce radente calda",
+          "temperatura": "tiepida, aria ferma",
+          "affollamento": "basso",
+          "emozione_target": "malinconia"
+        }
+      }
+    },
+    {
+      "numero": 5,
+      "id": "tappa_05_gianicolo",
+      "poi_id": "poi_gianicolo",
+      "nome": "Gianicolo",
+      "coordinate": [41.8918, 12.4647],
+      "orario_consigliato": "18:00",
+      "momento_giornata": "tramonto",
+      "durata_visita_min": 90,
+      "descrizione_breve": "Il colle più alto da cui si domina l'intera città eterna al calare del sole.",
+      "descrizione_storica": "Il Gianicolo è il colle più alto da cui si domina l'intera Roma. Sul colle sorge il convento di Sant'Onofrio, dove morì il poeta Torquato Tasso nel 1595. Nel 1857 Gregorovius pubblicò un saggio sulla festa annuale del 25 aprile in onore del Tasso, durante la quale i romani di ogni ceto sociale salivano sul colle insieme. ",
+      "esperienza": {
+        "musica": {
+          "brano": "Notturno in Mi bemolle maggiore",
+          "compositore": "Frédéric Chopin",
+          "spotify_url": "https://open.spotify.com/intl-it/track/61YM5SkqqeUjIBL7It56cs"
+        },
+        "letteratura": {
+          "citazione": "Roma è così profondamente silenziosa che si può qui in pace divina sentire, pensare e lavorare.",
+          "autore": "Ferdinand Gregorovius"
+        },
+        "atmosfera": {
+          "luce": "tramonto dorato e viola",
+          "temperatura": "fresca, brezza serale",
+          "affollamento": "medio",
+          "emozione_target": "pace interiore"
+        }
+      }
+    }
+  ],
+  "pois": [
+    {
+      "id": "poi_pincio",
+      "nome": "Terrazza del Pincio 🌅",
+  "fotografia": "Scatta all'alba dal bordo sinistro della terrazza: la cupola di San Pietro si centra tra i pini. Usa luce naturale, niente flash." ,
+      "coordinate": [41.9135, 12.4826],
+      "storia": "",
+      "curiosita": "Il nome Pincio deriva dalla famiglia Pinci, proprietaria del colle in epoca romana. Da qui si vede la cupola di San Pietro, i tetti di Roma e in lontananza i Colli Albani.",
+      "metadata": {
+        "orari_apertura": "aperto h24",
+        "come_arrivare": "Il Pincio si trova sopra Piazza del Popolo; Il modo più semplice per arrivare è scendere alla fermata Metro A Flaminio e salire a piedi verso la terrazza attraverso il parco.",
+        "biglietto": "Gratuito",
+        "accessibilita": "Accessibile, vialetti asfaltati"
+      }
+    },
+    {
+      "id": "poi_foro_romano",
+      "nome": "Foro Romano e Palatino",
+      "fotografia": "Inquadra le colonne del Tempio di Saturno con la luce mattutina alle spalle. Focale medio (40mm) per restituire scala e profondità." ,
+      "coordinate": [41.8925, 12.4853],
+      "storia": "",
+      "curiosita": "Il biglietto include anche il Colosseo. Gregorovius era affascinato dagli strati medievali nascosti sotto l'Antichità; le chiese paleocristiane sui templi, le torri nobiliari tra le colonne.",
+      "metadata": {
+        "orari_apertura": "9:00-19:00 (ultima entrata 18:00)",
+         "come_arrivare": "Dal Pincio scendi verso Piazza del Popolo e prosegui lungo Via del Corso fino a Piazza Venezia. Da qui continua a piedi verso il Foro Romano, seguendo le indicazioni per il Colosseo. Il percorso è interamente pedonale e dura circa 30 minuti." ,
+        "biglietto": "€18 (include Colosseo e Palatino)",
+        "accessibilita": "Parzialmente accessibile"
+      }
+    },
+    {
+      "id": "poi_campidoglio",
+      "nome": "Piazza del Campidoglio",
+      "fotografia": "Fotografa la piazza dall'alto della Cordonata: la stella pavimentale di Michelangelo si vede intera. Ora di punta: primo pomeriggio con luce zenitale." ,
+      "coordinate": [41.8933, 12.4828],
+      "storia": "",
+      "curiosita": "Sul Campidoglio nel 1876 Gregorovius ricevette il diploma di Cittadino Onorario di Roma(un onore rarissimo per uno straniero), che venne consegnato dal S.P.Q.R. in riconoscimento della sua 'Storia della città di Roma nel Medioevo'."
+
+,
+      "metadata": {
+        "orari_apertura": "Piazza sempre aperta; Musei 9:30-19:30",
+        "come_arrivare":"Dal Foro Romano segui il percorso pedonale che conduce alla cordonata progettata da Michelangelo e sali fino alla piazza. Il tragitto è breve e richiede circa 5 minuti." ,
+        "biglietto": "Piazza gratuita; Musei Capitolini €15",
+        "accessibilita": "Accessibile con rampa laterale"
+        
+      }
+    },
+    {
+      "id": "poi_ghetto_ebraico",
+      "nome": "Ghetto Ebraico di Roma",
+      "fotografia": "Cerca i vicoli laterali nel pomeriggio: la luce filtra stretta tra i palazzi e crea contrasti forti. Il Portico d'Ottavia funziona meglio in controluce." ,
+      "coordinate": [41.8956, 12.4769],
+      "storia": "",
+      "curiosita": "La comunità ebraica romana è la più antica d'Europa. Per Gregorovius era la prova vivente dell'eternità di Roma, un popolo sopravvissuto a tutto.",
+      "metadata": {
+        "orari_apertura": "Quartiere sempre aperto; Sinagoga 10:00-17:00",
+        "come_arrivare":"Dal Campidoglio al Ghetto ebraico sono 5 minuti a piedi;scendi dal Campidoglio verso il Teatro di Marcello e sei già nel quartiere." ,
+        "biglietto": "Quartiere gratuito; Sinagoga con museo €12",
+        "accessibilita": "Accessibile"
+      }
+    },
+    {
+      "id": "poi_gianicolo",
+      "nome": "Gianicolo — Piazzale Garibaldi",
+      "fotografia": "Arriva 20 minuti prima del tramonto. Inquadra le cupole di Roma con il cielo arancione sullo sfondo. Treppiede consigliato per la luce bassa." ,
+      "coordinate": [41.8918, 12.4647],
+      "storia": "",
+      "curiosita": "Ogni giorno alle 12:00 un cannone spara dal Gianicolo, questa è una tradizione risalente al 1847, in piena epoca gregoroviana.",
+      "metadata": {
+        "orari_apertura": "Sempre aperto",
+        "come_arrivare": "Dal Ghetto Ebraico attraversa il Tevere in direzione Trastevere (Ponte Fabricio o Ponte Cestio), poi prosegui verso il Gianicolo seguendo le indicazioni per il colle. La salita finale è panoramica e il percorso dura circa 25 minuti." ,
+        "biglietto": "Gratuito",
+        "accessibilita": "Accessibile in auto o bus 870 da Trastevere"
+      }
+    }
+  ]
+  }

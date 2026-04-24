@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gregorovius Leaflet Elegante</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    :root {
+      --bg: #f3efe7;
+      --surface: #faf7f1;
+      --surface-2: #fffdf9;
+      --surface-3: #ece5d8;
+      --text: #261d16;
+      --muted: #72665a;
+      --line: rgba(61,43,28,.12);
+      --accent: #7a5634;
+      --accent-2: #ad8456;
+      --accent-soft: rgba(122,86,52,.10);
+      --success: #44674b;
+      --danger: #8a3e35;
+      --shadow: 0 12px 40px rgba(48, 32, 18, .10);
+      --radius: 18px;
+      --radius-sm: 12px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin:0; padding:0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(180deg, #efe9de 0%, #f7f3ec 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    button, input, select, textarea { font: inherit; }
+    .serif { font-family: 'Cormorant Garamond', serif; }
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      display:flex; justify-content:space-between; align-items:center; gap: 16px;
+      padding: 18px 28px;
+      background: rgba(250,247,241,.86);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+    .emoji-marker {
+  font-size: 20px;
+  width: 34px;
+  height: 34px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  border: 2px solid #7a5634;
+  transform: translate(-50%, -50%);
+}
+    .brand { display:flex; align-items:center; gap:14px; }
+    .logo {
+      width: 42px; height: 42px; border-radius: 50%; border:1px solid rgba(122,86,52,.25);
+      display:grid; place-items:center; color:var(--accent); background: radial-gradient(circle at 30% 30%, #fff, #efe5d5);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+      flex-shrink:0;
+    }
+    .brand h1 { margin:0; font-size: 1.15rem; letter-spacing:.02em; }
+    .brand p { margin:2px 0 0; font-size:.84rem; color:var(--muted); }
+    .toolbar { display:flex; gap:10px; flex-wrap:wrap; }
+    .btn {
+      border:1px solid var(--line); background: var(--surface-2); color:var(--text);
+      padding: 10px 14px; border-radius: 999px; cursor:pointer; transition:.2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color:#fff; border-color: transparent; }
+    .hero {
+      max-width: 1240px; margin: 0 auto; padding: 32px 24px 18px;
+    }
+    .hero-card, .panel, .detail-card, .final-card {
+      background: rgba(250,247,241,.88);
+      border:1px solid rgba(61,43,28,.08);
+      box-shadow: var(--shadow);
+      border-radius: 24px;
+    }
+    .hero-card {
+      min-height: 430px;
+      padding: 38px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      background:
+        linear-gradient(180deg, rgba(34,22,12,.12) 0%, rgba(34,22,12,.30) 28%, rgba(34,22,12,.64) 65%, rgba(34,22,12,.82) 100%),
+        url('https://pplx-res.cloudinary.com/image/upload/pplx_search_images/b06e51ac76e5b5133792caba3ed01aed85d6bda0.jpg') center/cover no-repeat;
+      color: #fffaf2;
+      overflow:hidden;
+      position:relative;
+    }
+    .hero-card::after {
+      content:'';
+      position:absolute; inset:0;
+      background: radial-gradient(circle at top left, rgba(255,255,255,.16), transparent 34%);
+      pointer-events:none;
+    }
+    .eyebrow {
+      text-transform: uppercase; letter-spacing: .18em; font-size: .73rem; color: #f1d3a7; font-weight: 700;
+      margin-bottom: 14px; position:relative; z-index:1;
+    }
+    .hero h2 { margin:0 0 14px; font-size: clamp(3.2rem, 5vw, 5.6rem); line-height: .92; font-weight: 600; position:relative; z-index:1; text-shadow: 0 10px 30px rgba(0,0,0,.28); }
+    .hero .subtitle { margin:0 0 18px; color: rgba(255,248,238,.92); font-size: 1.12rem; max-width: 60ch; position:relative; z-index:1; }
+    .hero .bio { color: rgba(255,244,231,.86); line-height: 1.8; max-width: 66ch; position:relative; z-index:1; }
+    .meta-grid { display:grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-top: 22px; }
+    .meta-box {
+      background: rgba(255,250,242,.14); border:1px solid rgba(255,240,219,.18); border-radius: 16px; padding: 14px; backdrop-filter: blur(6px); position:relative; z-index:1;
+    }
+    .meta-box .k { font-size:.72rem; text-transform: uppercase; letter-spacing:.12em; color: rgba(255,237,212,.75); }
+    .meta-box .v { margin-top:6px; font-weight:700; color:#fffaf2; }
+    .app-shell {
+      max-width: 1240px; margin: 0 auto; padding: 10px 24px 34px;
+      display:grid; grid-template-columns: 310px minmax(0, 1fr); gap: 22px;
+      min-height: calc(100vh - 220px);
+    }
+    .sidebar { padding: 22px; height: calc(100vh - 180px); position: sticky; top: 90px; overflow: auto; }
+    .sidebar-title { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; margin-bottom: 18px; }
+    .sidebar-title h3 { margin:0; font-size:1.25rem; }
+    .sidebar-title span { color:var(--muted); font-size:.88rem; }
+    .progress-wrap { background: rgba(122,86,52,.08); height: 10px; border-radius: 999px; overflow:hidden; margin-bottom: 20px; }
+    .progress-fill { height:100%; width:0%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .3s ease; }
+    .timeline { display:flex; flex-direction:column; gap: 10px; }
+    .timeline-item {
+      padding: 14px; border-radius: 16px; cursor:pointer; border:1px solid transparent;
+      background: rgba(255,255,255,.45); transition: .2s ease;
+    }
+    .timeline-item:hover { transform: translateX(2px); border-color: rgba(122,86,52,.15); }
+    .timeline-item.current { background: rgba(122,86,52,.14); border-color: rgba(122,86,52,.24); }
+    .timeline-item.completed { background: rgba(68,103,75,.12); border-color: rgba(68,103,75,.18); }
+    .timeline-top { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+    .timeline-badge { font-size:.73rem; color:var(--accent); text-transform:uppercase; letter-spacing:.12em; font-weight:700; }
+    .timeline-time { font-size:.82rem; color:var(--muted); }
+    .timeline-name { margin-top: 6px; font-weight:700; }
+    .timeline-desc { margin-top: 6px; color: var(--muted); font-size:.9rem; line-height:1.5; }
+    .main { display:grid; grid-template-rows: minmax(320px, 45vh) auto; gap: 20px; }
+    .map-card { overflow:hidden; position:relative; }
+    #map { width:100%; height:100%; min-height:320px; }
+    .map-overlay {
+      position:absolute; top:16px; right:16px; z-index: 500;
+      background: rgba(250,247,241,.92); border:1px solid rgba(61,43,28,.08); border-radius: 16px;
+      padding: 12px 14px; box-shadow: var(--shadow); max-width: 280px;
+    }
+    .map-overlay .small { font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+    .map-overlay .title { margin-top:5px; font-weight:700; color:var(--accent); }
+    .details { padding: 24px; }
+    .detail-head {
+      display:grid; grid-template-columns: auto 1fr auto; gap:18px; align-items:start;
+      padding-bottom: 18px; border-bottom:1px solid var(--line); margin-bottom: 22px;
+    }
+    .num {
+      width:72px; height:72px; border-radius:20px; display:grid; place-items:center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2)); color:#fff; font-size:2rem; font-weight:800;
+      box-shadow: 0 10px 22px rgba(122,86,52,.22);
+    }
+    .detail-head h3 { margin:0; font-size:2rem; }
+    .detail-sub { margin-top:8px; color:var(--muted); line-height:1.7; max-width: 72ch; }
+    .time-pill {
+      padding: 10px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size:.88rem;
+    }
+    .chips { display:flex; flex-wrap:wrap; gap:10px; margin-top: 14px; }
+    .chip { padding:8px 12px; border-radius:999px; background:#fff; border:1px solid var(--line); color:var(--muted); font-size:.86rem; }
+    .detail-grid { display:grid; grid-template-columns: 1.15fr .85fr; gap: 18px; }
+    .stack { display:flex; flex-direction:column; gap: 18px; }
+    .section-title { margin:0 0 14px; font-size:1.15rem; color:var(--accent); }
+    .detail-card { padding: 18px; }
+    .detail-card p { margin:0; line-height:1.75; color:#43362b; }
+    .quote-box {
+      margin-top: 14px; padding: 16px; border-left: 3px solid var(--accent); background: rgba(122,86,52,.06); border-radius: 0 14px 14px 0;
+    }
+    .quote-box small { display:block; margin-top:10px; color:var(--muted); }
+    .fact-grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+    .fact {
+      padding: 14px; border-radius: 14px; background: rgba(255,255,255,.62); border: 1px solid var(--line);
+    }
+    .fact .label { font-size:.72rem; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin-bottom:6px; }
+    .fact .value { font-weight:700; color:var(--text); line-height:1.4; }
+    .music-box {
+      background: linear-gradient(145deg, #6f5338, #8c6a48); color:#fff; border-radius: 18px; padding: 18px;
+    }
+    .music-box h4 { margin:0 0 8px; font-size:1.05rem; }
+    .music-box p { color:rgba(255,255,255,.86); margin: 0 0 12px; }
+    .music-box audio { width:100%; margin: 10px 0; }
+    .moods { display:flex; flex-wrap:wrap; gap: 8px; margin-bottom: 12px; }
+    .mood-btn {
+      padding: 9px 12px; border-radius: 999px; border:1px solid rgba(122,86,52,.16); background:#fff; cursor:pointer;
+    }
+    .mood-btn.active { background: var(--accent); color:#fff; border-color: var(--accent); }
+    .ai-text {
+      min-height: 150px; padding: 16px; border-radius: 16px; background: rgba(122,86,52,.06); border:1px solid rgba(122,86,52,.10);
+      color:#43362b; line-height:1.9; font-style: italic;
+    }
+    .quiz-options { display:flex; flex-direction:column; gap:10px; margin: 14px 0; }
+    .quiz-option {
+      padding: 12px 14px; border-radius: 14px; border:1px solid var(--line); background:#fff; cursor:pointer; text-align:left;
+    }
+    .quiz-option.ok { border-color: rgba(68,103,75,.38); background: rgba(68,103,75,.12); color: var(--success); }
+    .quiz-option.ko { border-color: rgba(138,62,53,.30); background: rgba(138,62,53,.10); color: var(--danger); }
+    .feedback { min-height: 24px; color: var(--muted); font-size:.95rem; }
+    .nav-row { display:flex; gap:12px; margin-top: 20px; }
+    .nav-row .btn { flex:1; border-radius: 14px; }
+    .footer-note { max-width:1240px; margin:0 auto; padding: 0 24px 34px; color: var(--muted); font-size:.9rem; }
+    .final-screen {
+      position: fixed; inset: 0; background: rgba(34,25,18,.42); backdrop-filter: blur(8px);
+      display:none; align-items:center; justify-content:center; padding:20px; z-index:1000;
+    }
+    .final-screen.show { display:flex; }
+    .final-card { max-width: 640px; padding: 34px; text-align:center; }
+    .final-score { font-size: 4rem; color: var(--accent); font-weight: 800; margin: 12px 0; }
+    .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: #fffdf9; color: #30251d; }
+    .leaflet-container { font-family: 'Inter', sans-serif; }
+    .custom-marker {
+      width: 18px; height: 18px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border: 2px solid #fff;
+      border-radius: 50%; box-shadow: 0 4px 14px rgba(0,0,0,.22);
+    }
+    @media (max-width: 1080px) {
+      .detail-grid, .app-shell { grid-template-columns: 1fr; }
+      .main { grid-template-rows: 320px auto; }
+      .sidebar { position: static; height: auto; }
+    }
+    @media (max-width: 720px) {
+      .topbar, .detail-head { grid-template-columns: 1fr; display:block; }
+      .hero { padding-top: 20px; }
+      .hero-card, .quote-card, .sidebar, .details { padding: 20px; }
+      .meta-grid, .fact-grid { grid-template-columns: 1fr 1fr; }
+      .detail-head { display:grid; grid-template-columns: 1fr; gap:12px; }
+      .num { width:58px; height:58px; font-size:1.5rem; }
+      .detail-head h3 { font-size:1.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-label="Logo Gregorovius">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+          <path d="M5 18c2-7 5-12 7-12s4 3 7 12"/>
+          <path d="M7 16h10"/>
+          <path d="M12 6v10"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="serif">Roma al Tramonto dell'Anima</h1>
+        <p>Gregorovius · mappa Leaflet · narrazione interattiva</p>
+      </div>
+    </div>
+    <div class="toolbar">
+      <button class="btn" id="backHomeBtn">Introduzione</button>
+      <button class="btn btn-primary" id="startBtn">Apri il percorso</button>
+    </div>
+  </header>
+
+  <section class="hero" id="heroSection">
+    <article class="hero-card">
+      <div class="eyebrow">Passeggiata letteraria a Roma</div>
+      <h2 class="serif" id="heroTitle">Roma al Tramonto dell'Anima</h2>
+      <p class="subtitle" id="heroSubtitle"></p>
+      <p class="bio" id="heroBio"></p>
+      <div class="meta-grid">
+        <div class="meta-box"><div class="k">Tappe 📍</div><div class="v" id="metaStops">5</div></div>
+        <div class="meta-box"><div class="k">Durata ⏱️</div><div class="v" id="metaDuration"></div></div>
+        <div class="meta-box"><div class="k">Distanza 📏</div><div class="v" id="metaDistance"></div></div>
+        <div class="meta-box"><div class="k">Tema 🎭</div><div class="v" id="metaTheme"></div></div>
+      </div>
+      <div class="nav-row" style="margin-top:22px; position:relative; z-index:1; max-width:280px;">
+        <button class="btn btn-primary" id="heroStartBtn">Inizia la giornata</button>
+      </div>
+    </article>
+  </section>
+
+  <main class="app-shell" id="appShell">
+    <aside class="sidebar panel">
+      <div class="sidebar-title">
+        <div>
+          <h3 class="serif">Itinerario</h3>
+          <span id="sidebarCharacter">Ferdinand Gregorovius</span>
+        </div>
+        <span><strong id="visitedCount">0</strong>/<span id="totalCount">0</span> tappe</span>
+      </div>
+      <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="timeline" id="timeline"></div>
+    </aside>
+
+    <section class="main">
+      <div class="map-card panel">
+        <div id="map"></div>
+        <div class="map-overlay">
+          <div class="small">Percorso su Leaflet</div>
+          <div class="title" id="mapOverlayTitle">Seleziona una tappa</div>
+        </div>
+      </div>
+
+      <section class="details panel">
+        <div class="detail-head">
+          <div class="num" id="detailNum">1</div>
+          <div>
+            <h3 class="serif" id="detailTitle">Terrazza del Pincio</h3>
+            <p class="detail-sub" id="detailShort"></p>
+            <div class="chips">
+              <span class="chip" id="chipMoment"></span>
+              <span class="chip" id="chipDuration"></span>
+              <span class="chip" id="chipTicket"></span>
+              <span class="chip">Punti: <strong id="scoreInline">0</strong></span>
+            </div>
+          </div>
+          <div class="time-pill" id="detailTime">07:00</div>
+        </div>
+
+        <div class="detail-grid">
+          <div class="stack">
+            <article class="detail-card">
+              <h4 class="section-title serif"> 📜 Storia del luogo</h4>
+              <p id="storyText"></p>
+              <div class="quote-box">
+                <div id="quoteText"></div>
+                <small id="quoteMeta"></small>
+              </div>
+            </article>
+
+            <article class="detail-card">
+              <h4 class="section-title serif">🌅 Atmosfera e musica 🎵 </h4>
+              <div class="fact-grid" id="atmosphereGrid"></div>
+              <div class="music-box" style="margin-top:16px;">
+                <h4 id="musicTitle"></h4>
+                <p id="musicSubtitle"></p>
+                <audio controls id="musicPlayer">
+                  <source id="musicSource" src="" type="audio/mpeg">
+                </audio>
+                <p id="musicDesc"></p>
+                <div class="nav-row" style="margin-top:12px;">
+                  <a class="btn" id="spotifyBtn" href="#" target="_blank" rel="noopener noreferrer">Apri su Spotify</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="detail-card">
+              <h4 class="section-title serif">Informazioni pratiche ❗​ </h4>
+              <div class="fact-grid" id="practicalGrid"></div>
+            </article>
+          </div>
+
+          <div class="stack">
+            <article class="detail-card">
+              <h4 class="section-title serif"> 🗣️ Voce di Gregorovius</h4>
+              <div class="moods" id="moodButtons"></div>
+              <div class="ai-text" id="aiText"> 📝​ Scegli un tono narrativo per ascoltare e leggere la voce AI della tappa.</div>
+            </article>
+
+            <article class="detail-card">
+              <h4 class="section-title serif">🧠 Sfida dello storico</h4>
+              <p id="quizQuestion"></p>
+              <div class="quiz-options" id="quizOptions"></div>
+              <div class="feedback" id="quizFeedback"></div>
+              <div class="nav-row">
+                <button class="btn btn-primary" id="completeBtn" disabled>Tappa completata</button>
+              </div>
+            </article>
+
+            <article class="detail-card">
+              <h4 class="section-title serif">📸 Fotografia e curiosità 🔎 </h4>
+              <div class="fact-grid">
+                <div class="fact"><div class="label"> 🔎 Curiosità</div><div class="value" id="curiosityText"></div></div>
+                <div class="fact"><div class="label">Consiglio fotografico📸 </div><div class="value" id="photoText"></div></div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="nav-row">
+          <button class="btn" id="prevBtn">Tappa precedente</button>
+          <button class="btn btn-primary" id="nextBtn">Tappa successiva</button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  
+
+  <div class="final-screen" id="finalScreen" aria-hidden="true">
+    <div class="final-card">
+      <div class="eyebrow">Percorso completato 🎊​</div>
+      <h3 class="serif" style="margin:0; font-size:2.3rem;">Cittadino Onorario di Roma</h3>
+      <p style="margin:14px auto 0; max-width:52ch; color:var(--muted); line-height:1.7;" id="finalDesc"></p>
+      <div class="final-score" id="finalScore">0</div>
+      <p id="finalQuote" style="font-style:italic; line-height:1.8; color:#4b3e32;"></p>
+      <div class="nav-row" style="margin-top:22px;">
+        <button class="btn btn-primary" id="restartBtn">Ricomincia</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const QUIZ = {
+      tappa_01_pincio: [
+        { q: "Secondo i Diari romani di Gregorovius, quale caratteristica assume Roma durante le ore mattutine trascorse sulla terrazza del Pincio?", o: ["Una presenza viva", "Un reperto archeologico", "Una città caotica", "Un panorama immobile"], c: 0 },
+        { q: "Chi trasformò il Pincio in giardino pubblico in epoca napoleonica?", o: ["Napoleone Bonaparte", "Giuseppe Valadier", "Camillo Borghese", "Luigi Canina"], c: 1 }
+      ],
+      tappa_02_foro_romano: [
+        { q: "Quale aspetto del Foro Romano affascinava maggiormente Gregorovius?", o: ["Il valore commerciale", "Gli strati medievali nascosti", "La magnificenza imperiale", "Il restauro delle colonne"], c: 1 },
+        { q: "Come definisce i pomposi fori della Roma imperiale?", o: ["Monumenti eterni", "Semplici fori", "Centri religiosi attivi", "Cadenti di vecchiezza e argomento di leggenda"], c: 3 }
+      ],
+      tappa_03_campidoglio: [
+        { q: "Chi progettò la piazza del Campidoglio nel XVI secolo?", o: ["Bernini", "Borromini", "Michelangelo", "Bramante"], c: 2 },
+        { q: "Quale riconoscimento ricevette Gregorovius sul Campidoglio nel 1876?", o: ["Senatore romano", "Direttore dei Musei", "Professore universitario", "Cittadino onorario"], c: 3 }
+      ],
+      tappa_04_ghetto_ebraico: [
+        { q: "In quale anno Gregorovius scrisse il saggio Il Ghetto e gli Ebrei di Roma?", o: ["1850", "1853", "1858", "1862"], c: 1 },
+        { q: "Quale struttura romana del I secolo a.C. è il cuore del Ghetto ebraico?", o: ["Arco di Tito", "Teatro di Marcello", "Portico d'Ottavia", "Tempio di Giano"], c: 2 }
+      ],
+      tappa_05_gianicolo: [
+        { q: "A che ora spara il cannone del Gianicolo ogni giorno?", o: ["10:00", "11:00", "12:00", "13:00"], c: 2 },
+        { q: "Quale poeta morì nel convento di Sant'Onofrio sul Gianicolo nel 1595?", o: ["Dante Alighieri", "Francesco Petrarca", "Torquato Tasso", "Ludovico Ariosto"], c: 2 }
+      ]
+    };
+
+    const stopIcons = {
+  tappa_01_pincio: '🌅',
+  tappa_02_foro_romano: '🏺',
+  tappa_03_campidoglio: '🏛️',
+  tappa_04_ghetto_ebraico: '✡️',
+  tappa_05_gianicolo: '🌇'
+};
+
+    const NARRAZIONI = {
+      tappa_01_pincio: {
+        poetico: "L'alba sul Pincio è la prima pagina di un libro che Roma riscrive ogni giorno. Mi sono fermato sul bordo della terrazza con il cappotto abbottonato contro il fresco di ottobre, e ho guardato la cupola di San Pietro prendere colore; da grigia a rosa a oro. Non esiste panorama che parli più direttamente all'anima.",
+        storico: "Il Pincio fu trasformato in giardino pubblico da Giuseppe Valadier tra il 1809 e il 1814. Prima era proprietà delle grandi famiglie patrizie; i Pinci, da cui il nome. Ogni pietra nasconde un millennio. Vengo qui ogni mattina per ricordarmi che Roma non è una città: è un palinsesto.",
+        nostalgico: "Quante mattine ho trascorso qui in vent'anni! La prima volta ero un giovane prussiano squattrinato che guardava Roma come si guarda qualcosa di impossibile da possedere. Oggi mi rendo conto che ho consumato i miei anni migliori ad amarla e che non cambierei nulla.",
+        avventuroso: "Sono arrivato al Pincio prima dell'alba, nella nebbia, scivolando lungo i sentieri bui del parco. I gatti selvatici mi fissavano come sentinelle antiche. Quando il sole ha bucato le nuvole e Roma è apparsa ai miei piedi, ho capito perché tutti i grandi esploratori finivano inevitabilmente qui."
+      },
+      tappa_02_foro_romano: {
+        poetico: "Le colonne del Tempio di Saturno si stagliano contro il cielo azzurro come dita di un gigante sepolto — magnifiche nella loro incompletezza. Qui il tempo non è passato: si è accumulato, stratificato come le pagine di un libro che nessuno potrà mai finire di leggere.",
+        storico: "Il Foro Romano fu il centro politico, religioso e commerciale dell'Impero per quasi mille anni. Ho dedicato intere settimane a studiare i suoi strati medievali — le basiliche paleocristiane sulle fondamenta dei templi pagani. Roma non demolisce, trasforma.",
+        nostalgico: "La prima volta che entrai nel Foro ero così emozionato che mi fermai sulla soglia, incapace di muovermi. Oggi lo attraverso con la confidenza di chi conosce ogni pietra — eppure in certi angoli quella commozione originale si riaccende.",
+        avventuroso: "Ho scoperto un passaggio semisegreto dalla Basilica di Massenzio che porta direttamente al Palatino. Da lassù si domina l'intero Foro con la prospettiva dell'imperatore che guarda il suo popolo. Roma regala sempre qualcosa a chi la cerca con coraggio."
+      },
+      tappa_03_campidoglio: {
+        poetico: "Dal Campidoglio Roma si rivela nella sua interezza,le cupole, i tetti, il serpente del Tevere. Come Gibbon prima di me, è qui che ho capito la mia missione: restituire alla memoria il Medioevo romano che tutti avevano dimenticato.",
+        storico: "Il Campidoglio fu il centro del potere civico di Roma per millenni. La piazza attuale fu progettata da Michelangelo per papa Paolo III nel XVI secolo. I Musei Capitolini, fondati nel 1471, sono i più antichi musei pubblici del mondo.",
+        nostalgico: "Mi siedo sui gradini della piazza e guardo Roma stendersi ai miei piedi. Penso agli anni di lavoro negli archivi, alle pagine scritte e riscritte. Il Campidoglio è il luogo dove tutto ha avuto senso per la prima volta.",
+        avventuroso: "Ho percorso la Cordonata di Michelangelo di corsa stamattina, di buon'ora, prima che arrivassero i visitatori. In cima, nella luce dell'alba, la statua di Marco Aurelio sembrava animarsi. Roma è sempre pronta a sorprendere chi la incontra senza aspettative."
+      },
+      tappa_04_ghetto_ebraico: {
+        poetico: "I vicoli del Ghetto hanno una luce speciale nel pomeriggio,dorata, ferma, come se il tempo si fosse addensato tra questi muri. La comunità che vi abita da duemila anni ha qualcosa di eterno, come Roma stessa.",
+        storico: "Il Ghetto ebraico di Roma è abitato ininterrottamente da oltre duemila anni dalla Repubblica romana fino ad oggi. Il Portico d'Ottavia, del I secolo a.C., è il cuore antico del quartiere. Nel mio saggio del 1853 ho cercato di restituire dignità a questa storia spesso ignorata.",
+        nostalgico: "Quando percorro questi vicoli penso a quanto poco sia cambiato in duemila anni. Le stesse famiglie, le stesse strade strette, la stessa luce pomeridiana. Roma ha tanti volti, questo è il più antico di tutti.",
+        avventuroso: "Ho scoperto iscrizioni latine murate in un vicolo laterale che nessuna guida segnala. Il quartiere è un labirinto di storia stratificata, ogni portone nasconde secoli. Sono entrato in una bottega e ho parlato con un anziano che conosceva a memoria la storia di ogni pietra."
+      },
+      tappa_05_gianicolo: {
+        poetico: "Roma al tramonto vista dal Gianicolo è la cosa più bella che esista. Il cielo diventa una tavolozza: arancio, rosa, viola. Le cupole si scuriscono contro il cielo illuminato e Roma diventa una silhouette sacra che non dimenticherò mai.",
+        storico: "Il Gianicolo non rientra tra i sette colli tradizionali ma è da sempre il belvedere per eccellenza della città. Sul colle sorge Sant'Onofrio, dove morì Torquato Tasso nel 1595. Nel 1857 pubblicai un saggio sulla festa annuale del 25 aprile in suo onore, quando i romani di ogni ceto salivano qui insieme.",
+        nostalgico: "La mia ultima sera a Roma, prima di partire per Monaco, l'ho passata qui. Guardavo le cupole nell'oro del tramonto e pensavo ai vent'anni in questa città,ogni pagina scritta, ogni mattina al Pincio. Non piangevo. Ero troppo pieno di gratitudine.",
+        avventuroso: "Ho percorso il sentiero che sale al Gianicolo attraverso i giardini di una villa, il cancello sempre socchiuso nel pomeriggio. In cima, invece del belvedere affollato, una piccola terrazza dimenticata con la vista più bella di Roma. I segreti migliori appartengono a chi li cerca."
+      }
+    };
+
+    let DATA = null;
+    let STOPS = [];
+    let POIS = [];
+    let map = null;
+    let markers = [];
+    let routeLine = null;
+    let currentAudio = null;
+    let typingInterval = null;
+
+    const state = {
+      currentIndex: 0,
+      visited: new Set(),
+      score: 0,
+      answered: false,
+      chosen: null,
+      quizIndex: 0,
+      mood: null
+    };
+
+    const el = id => document.getElementById(id);
+
+    async function loadData() {
+      const res = await fetch('./data.json');
+      if (!res.ok) throw new Error('Impossibile caricare data.json');
+      DATA = await res.json();
+      STOPS = DATA.tappe || [];
+      POIS = DATA.pois || [];
+    }
+
+    function poiById(id) {
+      return POIS.find(p => p.id === id) || null;
+    }
+
+    function getCurrentStop() {
+      return STOPS[state.currentIndex];
+    }
+
+    function initHero() {
+      const it = DATA.itinerario;
+      el('heroTitle').textContent = it.nome;
+      el('heroSubtitle').textContent = it.sottotitolo;
+      el('heroBio').textContent = it.personaggio.biografia_breve;
+      el('metaStops').textContent = STOPS.length;
+      el('metaDuration').textContent = `${it.durata_totale_ore} ore`;
+      el('metaDistance').textContent = `${it.distanza_totale_km} km`;
+      el('metaTheme').textContent = it.tema;
+      el('sidebarCharacter').textContent = it.personaggio.nome;
+      el('totalCount').textContent = STOPS.length;
+      el('finalDesc').textContent = `Hai attraversato Roma dall'alba al tramonto come ${it.personaggio.nome}, seguendo un itinerario di ${STOPS.length} tappe tra storia, memoria e paesaggio.`;
+    }
+
+    function initMap() {
+      map = L.map('map', { zoomControl: true }).setView([41.8998, 12.4828], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+      routeLine = L.polyline(STOPS.map(s => s.coordinate), {
+        color: '#7a5634',
+        weight: 4,
+        opacity: .85,
+        dashArray: '8 10'
+      }).addTo(map);
+      map.fitBounds(routeLine.getBounds(), { padding: [30, 30] });
+      markers = STOPS.map((stop, idx) => {
+        const marker = L.marker(stop.coordinate, {
+          icon: L.divIcon({
+  className: '',
+  html: `<div class="emoji-marker">
+    ${stopIcons[stop.id] || '📍'}
+  </div>`,
+  iconSize: [34,34],
+  iconAnchor:[17,17]
+})
+        }).addTo(map);
+        marker.bindPopup(`<strong>${stop.numero}. ${stop.nome}</strong><br>${stop.orario_consigliato}`);
+        marker.on('click', () => openStop(idx));
+        return marker;
+      });
+    }
+
+    function renderTimeline() {
+      const timeline = el('timeline');
+      timeline.innerHTML = '';
+      STOPS.forEach((stop, idx) => {
+        const item = document.createElement('div');
+        item.className = 'timeline-item';
+        if (state.visited.has(stop.id)) item.classList.add('completed');
+        if (idx === state.currentIndex) item.classList.add('current');
+        item.innerHTML = `
+          <div class="timeline-top">
+            <span class="timeline-badge">${stop.momento_giornata}</span>
+            <span class="timeline-time">${stop.orario_consigliato}</span>
+          </div>
+          <div class="timeline-name">📍 ${stop.nome}</div>
+          <div class="timeline-desc">${stop.descrizione_breve}</div>
+        `;
+        item.onclick = () => openStop(idx);
+        timeline.appendChild(item);
+      });
+      el('visitedCount').textContent = state.visited.size;
+      const progress = STOPS.length ? (state.visited.size / STOPS.length) * 100 : 0;
+      el('progressFill').style.width = `${progress}%`;
+    }
+
+    function renderAtmosphere(atm) {
+      const grid = el('atmosphereGrid');
+      grid.innerHTML = '';
+      const entries = [
+  ['🔆​ Luce', atm?.luce || '—'],
+  ['🌡️ Temperatura', atm?.temperatura || '—'],
+  ['👥 Affollamento', atm?.affollamento || '—'],
+  ['💭 Emozione', atm?.emozione_target || '—']
+];
+      entries.forEach(([label, value]) => {
+        const box = document.createElement('div');
+        box.className = 'fact';
+        box.innerHTML = `<div class="label">${label}</div><div class="value">${value}</div>`;
+        grid.appendChild(box);
+      });
+    }
+
+    function renderPractical(stop, poi) {
+      const grid = el('practicalGrid');
+      const md = poi?.metadata || {};
+      grid.innerHTML = '';
+      [
+        ['Ingresso', md.biglietto || '—'],
+        ['Orari', md.orari_apertura || '—'],
+        ['Accessibilità', md.accessibilita || '—'],
+        ['Come arrivare', md.come_arrivare || '—']
+      ].forEach(([label, value]) => {
+        const box = document.createElement('div');
+        box.className = 'fact';
+        box.innerHTML = `<div class="label">${label}</div><div class="value">${value}</div>`;
+        grid.appendChild(box);
+      });
+      el('chipTicket').textContent = md.biglietto || 'Informazioni pratiche';
+      el('chipDuration').textContent = `${stop.durata_visita_min} minuti`;
+    }
+
+    function renderQuiz(stop) {
+      const questions = QUIZ[stop.id] || [];
+      state.quizIndex = Math.floor(Math.random() * (questions.length || 1));
+      state.answered = false;
+      state.chosen = null;
+      const q = questions[state.quizIndex];
+      el('quizFeedback').textContent = '';
+      el('completeBtn').disabled = true;
+      if (!q) {
+        el('quizQuestion').textContent = 'Nessun quiz disponibile per questa tappa.';
+        el('quizOptions').innerHTML = '';
+        el('completeBtn').disabled = false;
+        return;
+      }
+      el('quizQuestion').textContent = q.q;
+      el('quizOptions').innerHTML = '';
+      q.o.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-option';
+        btn.textContent = opt;
+        btn.onclick = () => answerQuiz(idx);
+        el('quizOptions').appendChild(btn);
+      });
+    }
+
+    function answerQuiz(index) {
+      if (state.answered) return;
+      const stop = getCurrentStop();
+      const q = (QUIZ[stop.id] || [])[state.quizIndex];
+      if (!q) return;
+      state.answered = true;
+      const options = [...document.querySelectorAll('.quiz-option')];
+      options.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === q.c) btn.classList.add('ok');
+        else if (idx === index) btn.classList.add('ko');
+      });
+      if (index === q.c) {
+        state.score += 150;
+        el('quizFeedback').textContent = 'Esatto: hai ottenuto 150 punti.';
+      } else {
+        el('quizFeedback').textContent = 'Risposta non esatta, ma la tappa è pronta per essere completata.';
+      }
+      el('scoreInline').textContent = state.score;
+      el('completeBtn').disabled = false;
+    }
+
+    function renderMoodButtons() {
+      const moods = DATA.itinerario.ai_layer.toni_disponibili;
+      const labels = { poetico: 'Poetico', storico: 'Storico', nostalgico: 'Nostalgico', avventuroso: 'Avventuroso' };
+      el('moodButtons').innerHTML = '';
+      moods.forEach(mood => {
+        const btn = document.createElement('button');
+        btn.className = 'mood-btn';
+        btn.textContent = labels[mood] || mood;
+        btn.onclick = () => pickMood(mood);
+        btn.dataset.mood = mood;
+        el('moodButtons').appendChild(btn);
+      });
+    }
+
+    function pickMood(mood) {
+      state.mood = mood;
+      document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.mood === mood));
+      const stop = getCurrentStop();
+      const text = NARRAZIONI[stop.id]?.[mood] || 'Nessuna narrazione disponibile.';
+      if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+      const audioPath = `./audio/${stop.id}_${mood}.mp3`;
+      currentAudio = new Audio(audioPath);
+      currentAudio.play().catch(() => {});
+      clearInterval(typingInterval);
+      let i = 0;
+      el('aiText').textContent = '';
+      typingInterval = setInterval(() => {
+        i++;
+        el('aiText').textContent = text.slice(0, i);
+        if (i >= text.length) clearInterval(typingInterval);
+      }, 16);
+    }
+
+    function renderStop(index) {
+      const stop = STOPS[index];
+      const poi = poiById(stop.poi_id);
+      const exp = stop.esperienza || {};
+      const music = exp.musica || {};
+      const letter = exp.letteratura || {};
+      const atm = exp.atmosfera || {};
+
+      el('detailNum').textContent = stop.numero;
+      el('detailTitle').textContent = stop.nome;
+      el('detailShort').textContent = stop.descrizione_breve;
+      el('detailTime').textContent = stop.orario_consigliato;
+      el('chipMoment').textContent = stop.momento_giornata;
+      el('mapOverlayTitle').textContent = `${stop.numero}. ${stop.nome}`;
+      el('storyText').textContent = stop.descrizione_storica;
+      el('quoteText').textContent = letter.citazione || '—';
+      el('quoteMeta').textContent = `${letter.autore || ''}${letter.opera ? ' · ' + letter.opera : ''}${letter.anno ? ' · ' + letter.anno : ''}`;
+      el('musicTitle').textContent = music.brano || 'Brano consigliato';
+      el('musicSubtitle').textContent = music.compositore || '';
+      el('musicDesc').textContent = poi?.storia || '';
+      el('spotifyBtn').href = music.spotify_url || '#';
+      el('curiosityText').textContent = poi?.curiosita || '—';
+      el('photoText').textContent = poi?.fotografia || '—';
+      el('scoreInline').textContent = state.score;
+      renderAtmosphere(atm);
+      renderPractical(stop, poi);
+      renderQuiz(stop);
+      renderMoodButtons();
+      el('aiText').textContent = 'Scegli un tono narrativo per ascoltare e leggere la voce AI della tappa.';
+      state.mood = null;
+
+      const source = el('musicSource');
+      source.src = '';
+      el('musicPlayer').load();
+      markers[index]?.openPopup();
+      map.setView(stop.coordinate, 15, { animate: true });
+      renderTimeline();
+      el('prevBtn').disabled = index === 0;
+      el('nextBtn').disabled = index === STOPS.length - 1;
+    }
+
+    function openStop(index) {
+      state.currentIndex = index;
+      renderStop(index);
+      document.getElementById('appShell').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function completeCurrentStop() {
+      const stop = getCurrentStop();
+      state.visited.add(stop.id);
+      renderTimeline();
+      if (state.visited.size === STOPS.length) {
+        el('finalScore').textContent = state.score;
+        el('finalQuote').textContent = STOPS[STOPS.length - 1].esperienza?.letteratura?.citazione || '';
+        el('finalScreen').classList.add('show');
+        return;
+      }
+      if (state.currentIndex < STOPS.length - 1) openStop(state.currentIndex + 1);
+    }
+
+    function restart() {
+      state.currentIndex = 0;
+      state.visited = new Set();
+      state.score = 0;
+      state.answered = false;
+      state.mood = null;
+      el('finalScreen').classList.remove('show');
+      openStop(0);
+      renderTimeline();
+    }
+
+    async function init() {
+      try {
+        await loadData();
+        initHero();
+        initMap();
+        renderTimeline();
+        renderStop(0);
+      } catch (e) {
+        document.body.innerHTML = `<main style="padding:40px;font-family:Inter,sans-serif;"><h1>Errore</h1><p>${e.message}</p><p>Assicurati che questo file HTML si trovi nella stessa cartella di <code>data.json</code> e degli MP3.</p></main>`;
+      }
+    }
+
+    el('startBtn').onclick = () => document.getElementById('appShell').scrollIntoView({ behavior: 'smooth' });
+    el('heroStartBtn').onclick = () => document.getElementById('appShell').scrollIntoView({ behavior: 'smooth' });
+    el('backHomeBtn').onclick = () => document.getElementById('heroSection').scrollIntoView({ behavior: 'smooth' });
+    el('prevBtn').onclick = () => state.currentIndex > 0 && openStop(state.currentIndex - 1);
+    el('nextBtn').onclick = () => state.currentIndex < STOPS.length - 1 && openStop(state.currentIndex + 1);
+    el('completeBtn').onclick = completeCurrentStop;
+    el('restartBtn').onclick = restart;
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
+
