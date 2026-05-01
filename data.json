@@ -9,7 +9,7 @@
     },
     "categoria": "storico",
     "tema": "Roma medievale e ottocentesca",
-    "durata_totale_ore": 10.5,
+    "durata_totale_ore": 11,
     "distanza_totale_km": 5.2,
     "ai_layer": {
       "toni_disponibili": ["poetico", "storico", "nostalgico", "avventuroso"]
